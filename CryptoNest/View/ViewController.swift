@@ -13,6 +13,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     let disposeBag = DisposeBag()
     var cryptoList = [Crypto]()
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var indicatorView: UIActivityIndicatorView!
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
@@ -23,6 +24,10 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     }
     
     private func setupBindings(){
+        cryptoVM
+            .loading
+            .bind(to: self.indicatorView.rx.isAnimating)
+            .disposed(by: disposeBag)
         cryptoVM
             .error
             .observe(on: MainScheduler.asyncInstance)
